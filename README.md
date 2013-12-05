@@ -8,11 +8,15 @@ Purpose
 I wanted to have an option to convert hg repo with file mapping
 without being history stripped.
 
+Usage
+=====
+* hg convert --config convert.prefixempty=true --config convert.hg.allowempty=true --sourcesort --filemap ${FILEMAP} ${SRC} ${DEST}
+
 Features
 =====
-* Can save history under filemap enabled
-* Can produce empty commits if needed
-* Can prefix empty commits that were not skipped
+* --config convert.hg.allowempty=true: Can save history under filemap enabled
+* --config convert.hg.allowempty=true: Can produce empty commits if needed
+* --config convert.prefixempty=true: Can prefix empty commits that were not skipped
 
 Requirements (versions info)
 =====

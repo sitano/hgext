@@ -148,6 +148,7 @@ class filemap_source(converter_source):
         self.origparents = {}
         self.children = {}
         self.seenchildren = {}
+        self.allowempty = ui.configbool('convert', 'hg.allowempty', False)
 
     def before(self):
         self.base.before()
@@ -343,7 +344,7 @@ class filemap_source(converter_source):
             if branch in pbranches:
                 closed = True
 
-        if len(mparents) < 2 and not closed and not self.wanted(rev, wp):
+        if not self.allowempty and len(mparents) < 2 and not closed and not self.wanted(rev, wp):
             # We don't want this revision.
             # Update our state and tell the convert process to map this
             # revision to the same revision its parent as mapped to.

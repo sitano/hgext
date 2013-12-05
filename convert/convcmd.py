@@ -121,6 +121,8 @@ class converter(object):
         self.splicemap = self.parsesplicemap(opts.get('splicemap'))
         self.branchmap = mapfile(ui, opts.get('branchmap'))
 
+        self.prefixempty = ui.configbool('convert', 'prefixempty', False)
+
     def parsesplicemap(self, path):
         """ check and validate the splicemap format and
             return a child/parents dictionary.
@@ -403,6 +405,8 @@ class converter(object):
         except KeyError:
             parents = [b[0] for b in pbranches]
         source = progresssource(self.ui, self.source, len(files))
+        if self.prefixempty and not files and "(SKIPREV)" not in commit.desc:
+            commit.desc = "(SKIPREV) " + commit.desc
         newnode = self.dest.putcommit(files, copies, parents, commit,
                                       source, self.map)
         source.close()

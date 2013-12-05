@@ -30,6 +30,7 @@ class mercurial_sink(converter_sink):
         converter_sink.__init__(self, ui, path)
         self.branchnames = ui.configbool('convert', 'hg.usebranchnames', True)
         self.clonebranches = ui.configbool('convert', 'hg.clonebranches', False)
+        self.allowempty = ui.configbool('convert', 'hg.allowempty', False)
         self.tagsbranch = ui.config('convert', 'hg.tagsbranch', 'default')
         self.lastbranch = None
         if os.path.isdir(path) and len(os.listdir(path)) > 0:
@@ -172,7 +173,7 @@ class mercurial_sink(converter_sink):
             text = "(octopus merge fixup)\n"
             p2 = hex(self.repo.changelog.tip())
 
-        if self.filemapmode and nparents == 1:
+        if not self.allowempty and self.filemapmode and nparents == 1:
             man = self.repo.manifest
             mnode = self.repo.changelog.read(bin(p2))[0]
             closed = 'close' in commit.extra
